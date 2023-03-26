@@ -25,9 +25,9 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
           style: TextStyle(color: Colors.black, fontSize: 16),
         ),
       ),
-      body: const Center(
-        child: Text("The Flutter Way!"),
-      ),
+      body: GoogleMap(
+          initialCameraPosition:
+              CameraPosition(target: sourceLocation, zoom: 14.5)),
     );
   }
 }

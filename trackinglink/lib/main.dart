@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'order_traking_page.dart';
+import 'package:trackinglink/order_traking_page.dart';
 
 void main() {
   runApp(const MyApp());
