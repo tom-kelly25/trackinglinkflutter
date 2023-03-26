@@ -1,6 +1,6 @@
 {
-    "name": "google_mao",
-    "short_name": "google_mao",
+    "name": "trackinglink",
+    "short_name": "trackinglink",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
