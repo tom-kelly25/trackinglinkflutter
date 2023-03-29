@@ -13,8 +13,10 @@ class OrderTrackingPage extends StatefulWidget {
 class OrderTrackingPageState extends State<OrderTrackingPage> {
   final Completer<GoogleMapController> _controller = Completer();
 
-  static const LatLng sourceLocation = LatLng(37.33500926, -122.03272188);
-  static const LatLng destination = LatLng(37.33429383, -122.06600055);
+  static const LatLng sourceLocation =
+      LatLng(53.090459156060014, -2.433587851774482);
+  static const LatLng destination =
+      LatLng(53.06761385346823, -2.5242529641628373);
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +28,21 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
         ),
       ),
       body: GoogleMap(
-          initialCameraPosition:
-              CameraPosition(target: sourceLocation, zoom: 14.5)),
+        initialCameraPosition: CameraPosition(
+          target: sourceLocation,
+          zoom: 12,
+        ),
+        markers: {
+          Marker(
+            markerId: MarkerId("source"),
+            position: sourceLocation,
+          ),
+          Marker(
+            markerId: MarkerId("destination"),
+            position: destination,
+          ),
+        },
+      ),
     );
   }
 }
