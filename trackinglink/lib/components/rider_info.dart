@@ -17,7 +17,6 @@ class RiderInfo extends StatelessWidget {
         child: ListTile(
           leading: const CircleAvatar(
             radius: 24,
-            backgroundImage: AssetImage("assets/Avatar.png"),
           ),
           title: const Text(
             "Mike Rojnidoost",
