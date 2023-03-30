@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:trackinglink/constants.dart';
 
 class OrderTrackingPage extends StatefulWidget {
@@ -17,6 +18,14 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
   static const LatLng sourceLocation = LatLng(53.090191, -2.431884);
   static const LatLng destination =
       LatLng(53.06648065780936, -2.5220188383332003);
+
+  LocationData? currentLocation;
+  void getCurrentLocation() {
+    Location location = Location();
+    location.getLocation().then((location) {
+      currentLocation = location;
+    });
+  }
 
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
