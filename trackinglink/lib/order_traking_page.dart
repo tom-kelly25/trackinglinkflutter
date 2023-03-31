@@ -29,19 +29,34 @@ class _OrderTrackingPageState extends State<OrderTrackingPage> {
   void initState() {
     super.initState();
     _getPolyline();
-    getLCurrentocation();
+    getCurrentocation();
   }
 
-  void getLCurrentocation() {
+  void getCurrentocation() async {
     Location location = Location();
+
     location.getLocation().then(
       (location) {
         currentLocation = location;
       },
     );
+
+    GoogleMapController googleMapController = await _controller.future;
+
     location.onLocationChanged.listen(
       (newLoc) {
         currentLocation = newLoc;
+        googleMapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              zoom: 14,
+              target: LatLng(
+                newLoc.latitude!,
+                newLoc.longitude!,
+              ),
+            ),
+          ),
+        );
         setState(() {});
       },
     );
@@ -104,7 +119,9 @@ class _OrderTrackingPageState extends State<OrderTrackingPage> {
                   position: destination,
                 ),
               },
-            ),
+              onMapCreated: (mapController) {
+                _controller.complete(mapController);
+              }),
     );
   }
 }
