@@ -9,10 +9,10 @@ class OrderTrackingPage extends StatefulWidget {
   const OrderTrackingPage({Key? key}) : super(key: key);
 
   @override
-  State<OrderTrackingPage> createState() => OrderTrackingPageState();
+  _OrderTrackingPageState createState() => _OrderTrackingPageState();
 }
 
-class OrderTrackingPageState extends State<OrderTrackingPage> {
+class _OrderTrackingPageState extends State<OrderTrackingPage> {
   final Completer<GoogleMapController> _controller = Completer();
 
   static const LatLng sourceLocation = LatLng(53.090191, -2.431884);
@@ -20,12 +20,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
       LatLng(53.06648065780936, -2.5220188383332003);
 
   LocationData? currentLocation;
-  void getCurrentLocation() {
-    Location location = Location();
-    location.getLocation().then((location) {
-      currentLocation = location;
-    });
-  }
+  StreamSubscription<LocationData>? locationSubscription;
 
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
@@ -35,9 +30,25 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
   void initState() {
     super.initState();
     _getPolyline();
+    _subscribeToLocationChanges();
   }
 
-  void _getPolyline() async {
+  @override
+  void dispose() {
+    locationSubscription?.cancel();
+    super.dispose();
+  }
+
+  void _subscribeToLocationChanges() {
+    Location location = Location();
+    locationSubscription = location.onLocationChanged.listen((location) {
+      setState(() {
+        currentLocation = location;
+      });
+    });
+  }
+
+  Future<void> _getPolyline() async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       google_api_key,
       PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
@@ -70,23 +81,30 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
           style: TextStyle(color: Colors.black, fontSize: 16),
         ),
       ),
-      body: GoogleMap(
-        polylines: Set<Polyline>.of(polylines.values),
-        initialCameraPosition: CameraPosition(
-          target: sourceLocation,
-          zoom: 15,
-        ),
-        markers: {
-          const Marker(
-            markerId: MarkerId("source"),
-            position: sourceLocation,
-          ),
-          const Marker(
-            markerId: MarkerId("destination"),
-            position: destination,
-          ),
-        },
-      ),
+      body: currentLocation == null
+          ? Center(child: CircularProgressIndicator())
+          : GoogleMap(
+              polylines: Set<Polyline>.of(polylines.values),
+              initialCameraPosition: CameraPosition(
+                target: LatLng(
+                    currentLocation!.latitude!, currentLocation!.longitude!),
+              ),
+              markers: {
+                Marker(
+                  markerId: const MarkerId("currentLocation"),
+                  position: LatLng(
+                      currentLocation!.latitude!, currentLocation!.longitude!),
+                ),
+                Marker(
+                  markerId: const MarkerId("source"),
+                  position: sourceLocation,
+                ),
+                Marker(
+                  markerId: const MarkerId("destination"),
+                  position: destination,
+                ),
+              },
+            ),
     );
   }
 }

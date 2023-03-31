@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.trackinglink">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
    
    <application
         android:label="trackinglink"
@@ -33,5 +35,6 @@
             android:value="2" />
             <meta-data android:name="com.google.android.geo.API_KEY"
                 android:value="AIzaSyACHBrvHM4kIbPmQVfbsi2IZaB7nXa4_Mc"/>
+                
     </application>
 </manifest>
