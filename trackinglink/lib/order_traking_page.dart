@@ -32,12 +32,6 @@ class _OrderTrackingPageState extends State<OrderTrackingPage> {
     getLCurrentocation();
   }
 
-  @override
-  void dispose() {
-    locationSubscription?.cancel();
-    super.dispose();
-  }
-
   void getLCurrentocation() {
     Location location = Location();
     location.getLocation().then(
@@ -93,6 +87,7 @@ class _OrderTrackingPageState extends State<OrderTrackingPage> {
               initialCameraPosition: CameraPosition(
                 target: LatLng(
                     currentLocation!.latitude!, currentLocation!.longitude!),
+                zoom: 14,
               ),
               markers: {
                 Marker(
