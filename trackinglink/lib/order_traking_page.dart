@@ -15,9 +15,8 @@ class OrderTrackingPage extends StatefulWidget {
 class _OrderTrackingPageState extends State<OrderTrackingPage> {
   final Completer<GoogleMapController> _controller = Completer();
 
-  static const LatLng sourceLocation = LatLng(53.090191, -2.431884);
-  static const LatLng destination =
-      LatLng(53.06648065780936, -2.5220188383332003);
+  static const LatLng sourceLocation = LatLng(53.1004, -2.4438);
+  static const LatLng destination = LatLng(53.0672, -2.5241);
 
   LocationData? currentLocation;
   StreamSubscription<LocationData>? locationSubscription;
@@ -30,7 +29,7 @@ class _OrderTrackingPageState extends State<OrderTrackingPage> {
   void initState() {
     super.initState();
     _getPolyline();
-    _subscribeToLocationChanges();
+    getLCurrentocation();
   }
 
   @override
@@ -39,13 +38,19 @@ class _OrderTrackingPageState extends State<OrderTrackingPage> {
     super.dispose();
   }
 
-  void _subscribeToLocationChanges() {
+  void getLCurrentocation() {
     Location location = Location();
-    locationSubscription = location.onLocationChanged.listen((location) {
-      setState(() {
+    location.getLocation().then(
+      (location) {
         currentLocation = location;
-      });
-    });
+      },
+    );
+    location.onLocationChanged.listen(
+      (newLoc) {
+        currentLocation = newLoc;
+        setState(() {});
+      },
+    );
   }
 
   Future<void> _getPolyline() async {
