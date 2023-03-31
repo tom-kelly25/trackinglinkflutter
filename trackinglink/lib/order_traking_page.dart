@@ -19,7 +19,6 @@ class _OrderTrackingPageState extends State<OrderTrackingPage> {
   static const LatLng destination = LatLng(53.0672, -2.5241);
 
   LocationData? currentLocation;
-  StreamSubscription<LocationData>? locationSubscription;
 
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
