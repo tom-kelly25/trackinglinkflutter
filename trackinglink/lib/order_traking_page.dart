@@ -24,11 +24,16 @@ class _OrderTrackingPageState extends State<OrderTrackingPage> {
   PolylinePoints polylinePoints = PolylinePoints();
   Map<PolylineId, Polyline> polylines = {};
 
+  BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
+
   @override
   void initState() {
     super.initState();
     _getPolyline();
     getCurrentocation();
+    setCustomeMarkerIcon();
   }
 
   void getCurrentocation() async {
@@ -85,6 +90,30 @@ class _OrderTrackingPageState extends State<OrderTrackingPage> {
     }
   }
 
+  void setCustomeMarkerIcon() {
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/Pin_source.png")
+        .then(
+      (icon) {
+        sourceIcon = icon;
+      },
+    );
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/Pin_destination.png")
+        .then(
+      (icon) {
+        destinationIcon = icon;
+      },
+    );
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/Badge.png")
+        .then(
+      (icon) {
+        currentLocationIcon = icon;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,15 +135,18 @@ class _OrderTrackingPageState extends State<OrderTrackingPage> {
               markers: {
                 Marker(
                   markerId: const MarkerId("currentLocation"),
+                  icon: currentLocationIcon,
                   position: LatLng(
                       currentLocation!.latitude!, currentLocation!.longitude!),
                 ),
                 Marker(
                   markerId: const MarkerId("source"),
+                  icon: sourceIcon,
                   position: sourceLocation,
                 ),
                 Marker(
                   markerId: const MarkerId("destination"),
+                  icon: destinationIcon,
                   position: destination,
                 ),
               },
